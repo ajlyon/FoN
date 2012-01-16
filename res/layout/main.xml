@@ -4,9 +4,33 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <TextView
+	<TextView android:id="@+id/prompt" android:textAppearance="?android:attr/textAppearanceLarge"
+		android:text="@string/main_prompt" android:layout_height="wrap_content" android:padding="3dip" android:textStyle="bold" android:gravity="center_horizontal" android:layout_width="match_parent"/>
+    
+    <ImageButton
+        android:id="@+id/imageButton1"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/hello" />
+        android:layout_height="fill_parent"
+        android:layout_weight=".5"
+        android:src="@drawable/ic_launcher" />
 
+    <ImageButton
+        android:id="@+id/imageButton2"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight=".5"
+        android:src="@drawable/ic_launcher" />
+
+    <com.facebook.android.LoginButton
+        android:id="@+id/login"
+        android:src="@drawable/login_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" 
+        android:layout_margin="30dp"
+        />
+    
+    <TextView android:id="@+id/instructions" android:textAppearance="?android:attr/textAppearanceMedium"
+		android:text="@string/main_instructions" android:layout_height="wrap_content" android:padding="3dip" android:gravity="center_horizontal" android:layout_width="match_parent"/>
+    
+    
 </LinearLayout>
