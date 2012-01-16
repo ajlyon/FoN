@@ -1,8 +1,5 @@
 package com.gimranov.hon;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -10,7 +7,6 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import org.apache.http.util.ByteArrayBuffer;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,9 +17,12 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.facebook.android.AsyncFacebookRunner;
@@ -38,16 +37,17 @@ import com.facebook.android.SessionEvents.LogoutListener;
 import com.facebook.android.SessionStore;
 import com.facebook.android.Util;
 
-public class HoNActivity extends Activity {
+public class HoNActivity extends Activity  {
 	
 	private static final String TAG = "com.gimranov.hon.HoNActivity";
 	
-	private ImageButton mImageButton1;
-	private ImageButton mImageButton2;
+	private ImageView mImageButton1;
+	private ImageView mImageButton2;
 	private LoginButton mLoginButton;
 	private TextView mPrompt;
 	private TextView mInstructions;
-	
+	private ProgressBar mProgress;
+		
 	private JSONObject person1;
 	private JSONObject person2;
 	
@@ -66,9 +66,12 @@ public class HoNActivity extends Activity {
         friends = new ArrayList<JSONObject>();
         scores = new ArrayList<JSONObject>();
         
-		mImageButton1 = (ImageButton) findViewById(R.id.imageButton1);
-		mImageButton2 = (ImageButton) findViewById(R.id.imageButton2);
+		mImageButton1 = (ImageView) findViewById(R.id.imageButton1);
+		mImageButton2 = (ImageView) findViewById(R.id.imageButton2);
         mLoginButton = (LoginButton) findViewById(R.id.login);
+        mProgress = (ProgressBar) findViewById(R.id.progressBar);
+        
+        mProgress.setMax(10);
         
         mPrompt = (TextView) HoNActivity.this.findViewById(R.id.prompt);
         mInstructions = (TextView) HoNActivity.this.findViewById(R.id.instructions);
@@ -91,6 +94,7 @@ public class HoNActivity extends Activity {
             	Log.d(TAG, "Button one clicked");
             	scores.add(person1);
             	mInstructions.setText(person1.optString("name")+ " is more fun?");
+            	mProgress.setProgress(scores.size());
             	mAsyncRunner.request("me", new HoNRequestListener());
             }
         });
@@ -100,6 +104,7 @@ public class HoNActivity extends Activity {
             	Log.d(TAG, "Button two clicked");
             	scores.add(person2);
             	mInstructions.setText(person2.optString("name")+ " -- no contest.");
+            	mProgress.setProgress(scores.size());
             	mAsyncRunner.request("me", new HoNRequestListener());
             }
         });
@@ -109,6 +114,14 @@ public class HoNActivity extends Activity {
                 View.INVISIBLE);
         
         mImageButton2.setVisibility(mFacebook.isSessionValid() ?
+                View.VISIBLE :
+                View.INVISIBLE);
+        
+        mLoginButton.setVisibility(!mFacebook.isSessionValid() ?
+                View.VISIBLE :
+                View.INVISIBLE);
+        
+        mInstructions.setVisibility(mFacebook.isSessionValid() ?
                 View.VISIBLE :
                 View.INVISIBLE);
     }
@@ -158,6 +171,17 @@ public class HoNActivity extends Activity {
             	
                 // process the response here: executed in background thread
                 Log.d(TAG, "Response: " + response.toString());
+                
+                // TODO the next stage, with server component
+                if (scores != null && scores.size() == 10) {
+                	HoNActivity.this.runOnUiThread(new Runnable() {
+                        public void run() {
+                        	mInstructions.setText("Finished scoring. We would show collated results now");
+                        	scores.clear();
+                        	mProgress.setProgress(0);
+                        }
+                    });	
+                }
                 
                 if (friends == null || friends.size() == 0) {
                 	JSONObject json = Util.parseJson(response);
@@ -218,4 +242,13 @@ public class HoNActivity extends Activity {
         InputStream is = ucon.getInputStream();
         return is;
     }
+    
+    // make swipe work
+    @Override
+    public boolean onTouchEvent(MotionEvent e1) {
+    	mInstructions.setText("Skipping these guys...");
+    	mAsyncRunner.request("me", new HoNRequestListener());
+    	return true;
+    }
+    
 }

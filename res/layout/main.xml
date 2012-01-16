@@ -5,32 +5,53 @@
     android:orientation="vertical" >
 
 	<TextView android:id="@+id/prompt" android:textAppearance="?android:attr/textAppearanceLarge"
-		android:text="@string/main_prompt" android:layout_height="wrap_content" android:padding="3dip" android:textStyle="bold" android:gravity="center_horizontal" android:layout_width="match_parent"/>
-    
-    <ImageButton
-        android:id="@+id/imageButton1"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_weight=".5"
-        android:src="@drawable/ic_launcher" />
+		android:text="@string/main_prompt" android:layout_height="wrap_content" 
+		android:padding="3dip" android:textStyle="bold" android:gravity="center_horizontal" 
+		android:layout_width="match_parent"/>
 
-    <ImageButton
-        android:id="@+id/imageButton2"
-        android:layout_width="fill_parent"
+    <LinearLayout
+        android:id="@+id/linearLayout1"
+        android:layout_width="match_parent"
         android:layout_height="fill_parent"
-        android:layout_weight=".5"
-        android:src="@drawable/ic_launcher" />
+        android:layout_weight="1" >
 
-    <com.facebook.android.LoginButton
-        android:id="@+id/login"
-        android:src="@drawable/login_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" 
-        android:layout_margin="30dp"
+        <ImageView
+            android:id="@+id/imageButton1"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight=".5"
+            android:src="@drawable/ic_launcher" />
+
+        <ImageView
+            android:id="@+id/imageButton2"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight=".5"
+            android:src="@drawable/ic_launcher" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         />
-    
-    <TextView android:id="@+id/instructions" android:textAppearance="?android:attr/textAppearanceMedium"
-		android:text="@string/main_instructions" android:layout_height="wrap_content" android:padding="3dip" android:gravity="center_horizontal" android:layout_width="match_parent"/>
-    
-    
+       
+           <com.facebook.android.LoginButton
+       android:id="@+id/login"
+       android:layout_width="wrap_content"
+       android:layout_height="22dp"
+       android:layout_margin="30dp"
+       android:src="@drawable/login_button"
+        android:gravity="center_horizontal" />
+           
+               <TextView
+        android:id="@+id/instructions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_instructions"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+         android:gravity="center_horizontal" />
+
 </LinearLayout>
